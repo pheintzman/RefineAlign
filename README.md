@@ -18,7 +18,7 @@ RefineAlign:
 - Dependencies: mafft, python3, and R (tested with R v4.4.2)
 - In the RefineAlign_v1.sh script:
 	- Update the ml commands for your system
-	- Update the SCRIPT_DIRECTORY path to the locations of the python and R scripts
+	- Update the SCRIPT_DIRECTORY path to the locations of /python_R_scripts
 
 # Requires:
 - A concatenated fasta file of the sequences to be aligned (INPUT_FASTA)
