@@ -35,7 +35,7 @@ REFERENCE_ID=$2
 
 
 # Scripts and tools
-SCRIPT_DIRECTORY=[PATH]/RefineAlign/python_R_scripts
+SCRIPT_DIRECTORY=/[PATH]/RefineAlign/python_R_scripts
 	# For python and R scripts
 
 
