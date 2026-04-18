@@ -1,5 +1,5 @@
 # RefineAlign
-A shell script for generating  alignments from a concatenated fasta file of mitogenome sequences.
+A shell script for generating  alignments of mitogenome sequences from a concatenated fasta file.
 Made for use on the Swedish NAISS Dardel cluster.
 
 RefineAlign:
