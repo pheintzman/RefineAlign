@@ -22,7 +22,7 @@ set -e
 	# A sequence to haplotype lookup
 
 # Before starting:
-	# Requires mafft, python3, and R (tested with R v4.4.2)
+	# Dependencies: mafft, python3, and R (tested with R v4.4.2)
 	# Update the ml commands below for your system
 	# Update the SCRIPT_DIRECTORY path to the locations of the python and R scripts
 	
