@@ -9,6 +9,12 @@ RefineAlign:
 - Removes superfluous gaps and N positions
 - Collapses identical sequences to haplotypes
 
+# Setup:
+	git clone https://github.com/pheintzman/RefineAlign.git
+	cd RefineAlign
+	chmod 755 RefineAlign_v1.sh
+	chmod 755 ./python_R_scripts/*
+
 # Requires:
 - A concatenated fasta file of the sequences to be aligned (INPUT_FASTA)
 - A fasta file of the sequence that the alignment coordinates are to be based on (REFERENCE_ID)
