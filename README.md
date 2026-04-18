@@ -30,9 +30,10 @@ RefineAlign:
 	# REFERENCE_ID: Just the file name (without .fasta extension)
 
 # Generates:
-- A final alignment of all sequences
-- A collapsed alignment of haplotypes
-- A sequence to haplotype lookup
+- A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.fasta)
+- A final alignment of all sequences with superfluous gaps and N positions removed (INPUT_FASTA.aln.curated.fasta)
+- A collapsed alignment of haplotypes (INPUT_FASTA.aln.curated.haplotypes.fasta)
+- A sequence to haplotype lookup (INPUT_FASTA.aln.curated.haplotype_mapping.tsv)
 	
 # Citation:
 RefineAlign first appears in Sharif et al. 2026, so for now please cite:
