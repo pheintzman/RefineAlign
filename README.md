@@ -22,13 +22,11 @@ RefineAlign:
 
 ## Requires:
 - A concatenated fasta file of the sequences to be aligned (INPUT_FASTA)
-- A fasta file of the sequence that the alignment coordinates are to be based on (REFERENCE_ID)
-- The REFERENCE_ID fasta needs to be in INPUT_FASTA with a header name identical to the REFERENCE_ID file name
 
 ## To run:
 	./RefineAlign_v1.sh INPUT_FASTA REFERENCE_ID
 	# INPUT_FASTA: File name including full path (with .fasta extension)
-	# REFERENCE_ID: Just the file name (without .fasta extension)
+	# REFERENCE_ID: Header name of the sequence for which the alignment coordinates are to be based on
 
 ## Generates:
 - A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.fasta)
