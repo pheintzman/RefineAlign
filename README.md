@@ -25,8 +25,8 @@ RefineAlign:
 
 ## To run:
 	./RefineAlign_v1.sh INPUT_FASTA REFERENCE_ID
-	# INPUT_FASTA: File name including full path (with .fasta extension)
-	# REFERENCE_ID: Header name of the sequence for which the alignment coordinates are to be based on
+	# INPUT_FASTA: File name including full path (with .fasta extension). Needs to include the REFERENCE_ID sequence
+	# REFERENCE_ID: Header name of the sequence in INPUT_FASTA for which the alignment coordinates are to be based on
 
 ## Generates:
 - A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.fasta)
