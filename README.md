@@ -1,13 +1,13 @@
 # RefineAlign
 A shell script for generating  alignments of mitogenome sequences from a concatenated fasta file.
 
-Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other local or HPC systems.
-
 RefineAlign:
 - Corrects reverse complement issues using mafft
 - Ensures that all sequences are on the same alignment coordinates
 - Removes superfluous gaps and N positions
 - Collapses identical sequences to haplotypes
+
+Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other local or HPC systems.
 
 ## Download and setup:
 	git clone https://github.com/pheintzman/RefineAlign.git
