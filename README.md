@@ -38,4 +38,5 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 ## Citation:
 RefineAlign first appears in Sharif et al. 2026, so for now please cite:
 	
-	Sharif, B. et al. (2026) DNAharvester: A Nextflow Pipeline for Analysing Highly Degraded DNA from Ancient and Historical Specimens. biorXiv
+	Sharif, B. et al. (2026) DNAharvester: A Nextflow Pipeline for Analysing Highly Degraded DNA from Ancient and Historical Specimens. biorXiv 2026.04.20.719564
+	https://doi.org/10.64898/2026.04.20.719564
