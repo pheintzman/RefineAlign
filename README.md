@@ -1,5 +1,5 @@
 # RefineAlign
-A shell script for generating  alignments of mitogenome sequences from a concatenated fasta file.
+A shell script for generating  alignments of mitogenome sequences from a fasta file.
 
 RefineAlign:
 - Corrects reverse complement issues using mafft
@@ -22,7 +22,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 	- Update the SCRIPT_DIRECTORY path to the location of /python_R_scripts
 
 ## Requires:
-- A concatenated fasta file of the sequences to be aligned (INPUT_FASTA)
+- A fasta file of the sequences to be aligned (INPUT_FASTA)
 
 ## To run:
 	./RefineAlign_v1.sh INPUT_FASTA REFERENCE_ID
