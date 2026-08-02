@@ -124,7 +124,7 @@ python3 ${SCRIPT_DIRECTORY}/remove_all_gap_and_N_columns.py \
 # Collapse identical sequences to haplotypes
 # Flag to collapse substrings. This means that if two sequences are identical but differ only by Ns or gaps then they are collapsed (if flag is not specified then defaults to FALSE)
 module purge
-module load PDC/24.11 R/4.4.2-cpeGNU-24.11
+module load PDCOLD/24.11 R/4.4.2-cpeGNU-24.11
 ${SCRIPT_DIRECTORY}/collapse2Haplotypes.R \
 	${INPUT_FASTA}.aln.curated.fasta \
 	--substringCollapse
