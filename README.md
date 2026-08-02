@@ -12,12 +12,12 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 ## Download and setup:
 	git clone https://github.com/pheintzman/RefineAlign.git
 	cd RefineAlign
-	chmod 755 RefineAlign_v1.sh
+	chmod 755 RefineAlign.sh
 	chmod 755 ./python_R_scripts/*
 
 ## Before starting:
 - Dependencies: mafft, python3, and R (tested with R v4.4.2)
-- In the RefineAlign_v1.sh script:
+- In the RefineAlign.sh script:
 	- Update the ml commands for your system
 	- Update the SCRIPT_DIRECTORY path to the location of /python_R_scripts
 
@@ -25,7 +25,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 - A fasta file of the sequences to be aligned (INPUT_FASTA)
 
 ## To run:
-	./RefineAlign_v1.sh INPUT_FASTA REFERENCE_ID
+	./RefineAlign.sh INPUT_FASTA REFERENCE_ID
 	# INPUT_FASTA: File name including full path (with .fasta extension). Needs to include the REFERENCE_ID sequence
 	# REFERENCE_ID: Header name of the sequence in INPUT_FASTA for which the alignment coordinates are to be based on
 
