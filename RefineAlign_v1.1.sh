@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20260418            #
-#       version 1.0         #
+#       20260801            #
+#       version 1.1         #
 #                           #
 #############################
 
