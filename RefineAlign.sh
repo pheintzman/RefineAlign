@@ -17,8 +17,8 @@ set -e
 	# The REFERENCE_ID fasta needs to be in INPUT_FASTA with a header name identical to the REFERENCE_ID file name
 
 # Generates:
-	# An alignment of all sequences including N/gap-only sites
-	# A final alignment of all sequences excluding N/gap-only sites
+	# A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.fasta)
+	# A final alignment of all sequences with superfluous gaps and N positions removed (INPUT_FASTA.aln.curated.fasta)
 	# A collapsed alignment of haplotypes
 	# A sequence to haplotype lookup
 
