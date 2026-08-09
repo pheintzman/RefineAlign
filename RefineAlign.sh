@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20260806            #
-#       version 2.0         #
+#       20260809            #
+#       version 2.1         #
 #                           #
 #############################
 
@@ -49,7 +49,7 @@ INPUT_FASTA=${INPUT_FASTA%.fasta}
 # Run an initial missingness filter to remove sequences with a maximum proportion of Ns given in $2
 # Script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
 module purge
-python ${SCRIPT_DIRECTORY}/fasta_nomissing.py \
+python ${SCRIPT_DIRECTORY}/fasta_nomissing_v2.py \
 	--fastafile=${INPUT_FASTA}.fasta \
 	--maxmissing_ind=${MISSING_FILTER_PROPORTION} \
 	> ${INPUT_FASTA}.missingfiltered.fasta
