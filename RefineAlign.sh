@@ -154,6 +154,7 @@ echo ">>>  Reference panel generation complete"
 
 
 # Remove intermediate files
+rm ${INPUT_FASTA}.missingfiltered.fasta
 rm ${INPUT_FASTA}.missingfiltered.aln.fasta
 rm ${INPUT_FASTA}.missingfiltered.aln.start_rotated*.fasta
 rm ${INPUT_FASTA}.missingfiltered.aln.end_rotated*.fasta
