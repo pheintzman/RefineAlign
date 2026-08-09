@@ -55,7 +55,7 @@ for n in seqs:
 
 print >>sys.stderr,'individual missing rates before filters:',
 for ID,seq in zip(IDs,seqs):
-	missingrate=sum(base in missing for base in pileup)/float(len(pileup))
+	missingrate=sum(base in missing for base in seq.upper())/float(len(seq))
 	print >>sys.stderr,ID+':'+str(round(missingrate,2)),
 print >>sys.stderr,''
 
@@ -112,15 +112,12 @@ for ID,newseq in zip(IDs,newseqs):
 	
 print >>sys.stderr,'individual missing rates after filters:',
 for ID,newseq in zip(IDs,newseqs):
-	missingrate=sum(base in missing for base in pileup)/float(len(pileup))
+	missingrate=sum(base in missing for base in newseq.upper())/float(len(newseq))
 	print >>sys.stderr,ID+':'+str(round(missingrate,2))
 print >>sys.stderr,''
 
 print >>sys.stderr,'excluded individuals:',excluded_ind
 exit(0)
-
-
-
 
 
 
