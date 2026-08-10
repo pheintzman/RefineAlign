@@ -44,4 +44,4 @@ RefineAlign first appears in Sharif et al. 2026, so for now please cite:
 	Sharif, B. et al. (2026) DNAharvester: A Nextflow Pipeline for Analysing Highly Degraded DNA from Ancient and Historical Specimens. biorXiv 2026.04.20.719564
 	https://doi.org/10.64898/2026.04.20.719564
 
-The missingness filter script (fasta_nomissing_v2.py) is modified from the original by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) that is distributed under a GNU General Public License v3.0. The modification treats IUPAC ambiguity codes and asterisks as missing data
+The missingness filter script (fasta_nomissing_v2.py) is modified from the original by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) that is distributed under a GNU General Public License v3.0. The modification recognises IUPAC ambiguity codes and asterisks, and treats them as missing data
