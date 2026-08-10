@@ -30,7 +30,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 	./RefineAlign.sh INPUT_FASTA REFERENCE_ID MISSING_FILTER_PROPORTION
 	# INPUT_FASTA: File name including full path (with .fasta extension). Needs to include the REFERENCE_ID sequence
 	# REFERENCE_ID: Header name of the sequence in INPUT_FASTA for which the alignment coordinates are to be based on
-	# MISSING_FILTER_PROPORTION: A value between 0.0 (removes sequences with any Ns) and 1.0 (keeps sequences with all Ns). A value of 0.6 will remove sequences with >60% Ns. (Ns = missingness)
+	# MISSING_FILTER_PROPORTION: A value between 0.0 (removes sequences with any Ns) and 1.0 (keeps sequences with all Ns). A value of 0.6 will retain sequences with <60% Ns (i.e. >40% completeness; Ns = missingness)
 
 ## Generates:
 - A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.missingfilter.refined.fasta)
