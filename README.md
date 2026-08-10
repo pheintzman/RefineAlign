@@ -2,9 +2,9 @@
 A shell script for generating  alignments of mitogenome sequences from a fasta file.
 
 RefineAlign:
-- Provides a missingness filter to remove sequences with Ns above a set proportion
 - Corrects reverse complement issues using mafft
 - Ensures that all sequences are on the same alignment coordinates
+- Provides a missingness filter to remove sequences with Ns above a set proportion
 - Refines the mafft alignment using muscle
 - Removes superfluous gaps and N positions
 - Collapses identical sequences to haplotypes
