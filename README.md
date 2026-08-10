@@ -30,7 +30,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 	./RefineAlign.sh INPUT_FASTA REFERENCE_ID MISSING_FILTER_PROPORTION
 	# INPUT_FASTA: File name including full path (with .fasta extension). Needs to include the REFERENCE_ID sequence
 	# REFERENCE_ID: Header name of the sequence in INPUT_FASTA for which the alignment coordinates are to be based on
-	# MISSING_FILTER_PROPORTION: A value between 0.0 (removes sequences with any Ns) and 1.0 (keeps sequences with all Ns). A value of 0.6 will retain sequences with <60% Ns (i.e. >40% completeness; Ns = missingness)
+	# MISSING_FILTER_PROPORTION: A value between 0.0 (removes sequences with any missing data) and 1.0 (keeps sequences with all missing data). A value of 0.6 will retain sequences with <60% missing data (i.e. >40% completeness)
 
 ## Generates:
 - A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.missingfilter.refined.fasta)
@@ -44,4 +44,4 @@ RefineAlign first appears in Sharif et al. 2026, so for now please cite:
 	Sharif, B. et al. (2026) DNAharvester: A Nextflow Pipeline for Analysing Highly Degraded DNA from Ancient and Historical Specimens. biorXiv 2026.04.20.719564
 	https://doi.org/10.64898/2026.04.20.719564
 
-The missingness filter script (fasta_nomissing_v2.py) is modified from the original by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) that is distributed under a GNU General Public License v3.0. The modification recognises IUPAC ambiguity codes and asterisks, and treats them as missing data
+The missingness filter script (fasta_nomissing_v2.py) is modified from the original by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) that is distributed under a GNU General Public License v3.0. Ns were only recognised as missing data in the original version. The modification also recognises IUPAC ambiguity codes and asterisks as missing data
