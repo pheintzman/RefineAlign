@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20260809            #
-#       version 2.1         #
+#       20260810            #
+#       version 2.2         #
 #                           #
 #############################
 
@@ -17,10 +17,10 @@ set -e
 	# The REFERENCE_ID fasta needs to be in INPUT_FASTA with a header name identical to the REFERENCE_ID file name
 
 # Generates:
-	# A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.fasta)
+	# A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.missingfilter.refined.fasta)
 	# A final alignment of all sequences with superfluous gaps and N positions removed (INPUT_FASTA.aln.curated.fasta)
-	# A collapsed alignment of haplotypes
-	# A sequence to haplotype lookup
+	# A collapsed alignment of haplotypes (INPUT_FASTA.aln.curated.haplotypes.fasta)
+	# A sequence to haplotype lookup TSV file (INPUT_FASTA.aln.curated.haplotype_mapping.tsv)
 
 # Before starting:
 	# Dependencies: python, mafft, python3, and R (tested with R v4.4.2)
@@ -31,9 +31,9 @@ set -e
 # Variables
 INPUT_FASTA=$1
 	# File name including path (with .fasta extension)
-MISSING_FILTER_PROPORTION=$2
+REFERENCE_ID=$2
 	# Just the file name (without .fasta extension)
-REFERENCE_ID=$3
+MISSING_FILTER_PROPORTION=$3
 	# Just the file name (without .fasta extension)
 
 
@@ -46,15 +46,6 @@ SCRIPT_DIRECTORY=tools/RefineAlign/python_R_scripts
 INPUT_FASTA=${INPUT_FASTA%.fasta}
 
 
-# Run an initial missingness filter to remove sequences with a maximum proportion of Ns given in $2
-# Script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
-module purge
-python ${SCRIPT_DIRECTORY}/fasta_nomissing_v2.py \
-	--fastafile=${INPUT_FASTA}.fasta \
-	--maxmissing_ind=${MISSING_FILTER_PROPORTION} \
-	> ${INPUT_FASTA}.missingfiltered.fasta
-
-
 echo ">>> Running Reference panel generation..."
 # Create an initial alignment with mafft
 # Also checks for and aligns reverse complemented sequences
@@ -62,8 +53,8 @@ module load mafft/7.526
 mafft \
 	--auto \
 	--adjustdirection \
-	${INPUT_FASTA}.missingfiltered.fasta \
-	> ${INPUT_FASTA}.missingfiltered.aln.fasta
+	${INPUT_FASTA}.fasta \
+	> ${INPUT_FASTA}.aln.fasta
 
 
 # Place everything on the same alignment coordinates as REFERENCE_ID
@@ -73,51 +64,60 @@ mafft \
 module purge
 ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
 python3 ${SCRIPT_DIRECTORY}/rotate_start_gaps.py \
-	${INPUT_FASTA}.missingfiltered.aln.fasta \
+	${INPUT_FASTA}.aln.fasta \
 	${REFERENCE_ID} \
-	${INPUT_FASTA}.missingfiltered.aln.start_rotated.fasta
+	${INPUT_FASTA}.aln.start_rotated.fasta
 
 # Create an intermediate alignment with mafft
 module purge
 module load mafft/7.526
 mafft \
 	--auto \
-	${INPUT_FASTA}.missingfiltered.aln.start_rotated.fasta \
-	> ${INPUT_FASTA}.missingfiltered.aln.start_rotated.aln.fasta
+	${INPUT_FASTA}.aln.start_rotated.fasta \
+	> ${INPUT_FASTA}.aln.start_rotated.aln.fasta
 
 # If downstream gaps in REFERENCE_ID, then alignment in this region is moved to the start
 # Then all gaps are removed from the alignment
 module purge
 ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
 python3 ${SCRIPT_DIRECTORY}/rotate_end_gaps.py \
-	${INPUT_FASTA}.missingfiltered.aln.start_rotated.aln.fasta \
+	${INPUT_FASTA}.aln.start_rotated.aln.fasta \
 	${REFERENCE_ID} \
-	${INPUT_FASTA}.missingfiltered.aln.end_rotated.fasta
+	${INPUT_FASTA}.aln.end_rotated.fasta
 
 # Create an intermediate alignment with mafft
 module purge
 module load mafft/7.526
 mafft \
 	--auto \
-	${INPUT_FASTA}.missingfiltered.aln.end_rotated.fasta \
-	> ${INPUT_FASTA}.missingfiltered.aln.end_rotated.aln.fasta
+	${INPUT_FASTA}.aln.end_rotated.fasta \
+	> ${INPUT_FASTA}.aln.end_rotated.aln.fasta
 
 # Final iteration to ensure alignment starts with REFERENCE_ID
 # Then all gaps are removed from the alignment
 module purge
 ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
 python3 ${SCRIPT_DIRECTORY}/rotate_start_gaps.py \
-	${INPUT_FASTA}.missingfiltered.aln.end_rotated.aln.fasta \
+	${INPUT_FASTA}.aln.end_rotated.aln.fasta \
 	${REFERENCE_ID} \
-	${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.fasta
+	${INPUT_FASTA}.aln.coordinates_fixed.fasta
 
 # Create the final alignment with mafft
 module purge
 module load mafft/7.526
 mafft \
 	--auto \
-	${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.fasta \
-	> ${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.aln.fasta
+	${INPUT_FASTA}.aln.coordinates_fixed.fasta \
+	> ${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta
+
+
+# Run a missingness filter to remove sequences with a maximum proportion of Ns given in $2
+# Script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
+module purge
+python ${SCRIPT_DIRECTORY}/fasta_nomissing_v2.py \
+	--fastafile=${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta \
+	--maxmissing_ind=${MISSING_FILTER_PROPORTION} \
+	> ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta
 
 
 # Refine the final alignment with muscle
@@ -125,8 +125,8 @@ module purge
 ml bioinfo-tools muscle/3.8.1551
 muscle \
 	-refine \
-	-in ${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.aln.fasta \
-	-out ${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.aln.refined.fasta
+	-in ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta \
+	-out ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.refined.fasta
 
 
 # Remove positions from the alignment that only consist of gaps and Ns
@@ -136,7 +136,7 @@ muscle \
 module purge
 ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
 python3 ${SCRIPT_DIRECTORY}/remove_all_gap_and_N_columns.py \
-	${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.aln.refined.fasta \
+	${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.refined.fasta \
 	${REFERENCE_ID} \
 	${INPUT_FASTA}.aln.curated.fasta \
 	--remove-reference-gaps
@@ -154,9 +154,9 @@ echo ">>>  Reference panel generation complete"
 
 
 # Remove intermediate files
-rm ${INPUT_FASTA}.missingfiltered.fasta
-rm ${INPUT_FASTA}.missingfiltered.aln.fasta
-rm ${INPUT_FASTA}.missingfiltered.aln.start_rotated*.fasta
-rm ${INPUT_FASTA}.missingfiltered.aln.end_rotated*.fasta
-rm ${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.fasta
-rm ${INPUT_FASTA}.missingfiltered.aln.coordinates_fixed.aln.fasta
+rm ${INPUT_FASTA}.aln.fasta
+rm ${INPUT_FASTA}.aln.start_rotated*.fasta
+rm ${INPUT_FASTA}.aln.end_rotated*.fasta
+rm ${INPUT_FASTA}.aln.coordinates_fixed.fasta
+rm ${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta
+rm ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta
