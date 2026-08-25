@@ -1,6 +1,7 @@
-# Script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
-# Version 2, modified by Pete Heintzman, also allows processing of IUPAC ambiguous bases by treating them as missing data
-
+# Original script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
+# Version 2, modified by Pete Heintzman with the assistance of ChatGPT, also allows processing of asterisks and IUPAC ambiguous bases by treating them as missing data.
+	# This version is also designed to be used on an alignment by recognising the gap character (-). Gaps are not considered in missingness calculations
+	# If sequences are of different lengths, then the script will exit with an error. This is in contrast to the original script, whereby sequences were silently truncated to the shortest. Applying the script to a multiple sequence alignment should not encounter this issue
 
 import sys
 from optparse import OptionParser
@@ -21,9 +22,10 @@ parser.add_option("--verbose", action="store_true", dest="verbose",help="",defau
 (options, args) = parser.parse_args()
 
 
-missing = ['N','R','Y','S','W','K','M','B','D','H','V']
+missing = ['N','R','Y','S','W','K','M','B','D','H','V','*']
+gaps = ['-']
 nucleotides = ['A','T','G','C']
-symbols = ['A','T','G','C','N','R','Y','S','W','K','M','B','D','H','V']
+symbols = nucleotides + missing + gaps
 
 
 seqs=[]
@@ -42,7 +44,11 @@ seqs.append(theseq)
 
 
 nsamples=len(seqs)
-seqlength=min([len(seq) for seq in seqs])
+lengths = set(len(seq) for seq in seqs)
+if len(lengths) != 1:
+    print >>sys.stderr,'ERROR: sequences have different lengths:',lengths
+    exit(1)
+seqlength = len(seqs[0])
 
 print >>sys.stderr,'number of samples:',nsamples
 print >>sys.stderr,'length before filters:',seqlength
@@ -55,8 +61,9 @@ for n in seqs:
 
 print >>sys.stderr,'individual missing rates before filters:',
 for ID,seq in zip(IDs,seqs):
-	missingrate=sum(base in missing for base in seq.upper())/float(len(seq))
-	print >>sys.stderr,ID+':'+str(round(missingrate,2)),
+    nongap=[base for base in seq.upper() if base not in gaps]
+    missingrate=sum(base in missing for base in nongap)/float(len(nongap))
+    print >>sys.stderr,ID+':'+str(round(missingrate,2)),
 print >>sys.stderr,''
 
 for x in xrange(0,seqlength):
@@ -64,8 +71,14 @@ for x in xrange(0,seqlength):
 	for s in seqs:
 		pileup += s[x].upper()
 	if options.verbose: print pileup
-	missingrate=sum(base in missing for base in pileup)/float(len(pileup))
-
+	nongap=[base for base in pileup if base not in gaps]
+	if len(nongap) == 0:
+	    masking = True
+	    mask.append(x)
+	    if options.verbose:
+	        print 'masked (all gaps)'
+	    continue
+	missingrate=sum(base in missing for base in nongap)/float(len(nongap))
 	alleles=[a for a in pileup if a in nucleotides]
 	numalleles=len(set(list(alleles)))
 	masking=False
@@ -78,7 +91,7 @@ for x in xrange(0,seqlength):
 	
 	if missingrate > options.maxmissing:
 		masking=True
-	if options.polymorphic and numalleles <2:
+	if options.polymorphic and numalleles < 2:
 		masking=True
 	if options.notriallelic and numalleles > 2:
 		masking=True
@@ -103,17 +116,19 @@ if len(newseqs[0]) == 0:
 
 excluded_ind=0
 for ID,newseq in zip(IDs,newseqs):
-	ind_missingrate=sum(base in missing for base in newseq)/float(len(newseq))
-	if ind_missingrate > options.maxmissing_ind: 
-		excluded_ind +=1
-		continue
-	print '>'+ID
-	print newseq
+    nongap=[base for base in newseq.upper() if base not in gaps]
+    ind_missingrate=sum(base in missing for base in nongap)/float(len(nongap))
+    if ind_missingrate > options.maxmissing_ind: 
+        excluded_ind +=1
+        continue
+    print '>'+ID
+    print newseq	
 	
 print >>sys.stderr,'individual missing rates after filters:',
 for ID,newseq in zip(IDs,newseqs):
-	missingrate=sum(base in missing for base in newseq.upper())/float(len(newseq))
-	print >>sys.stderr,ID+':'+str(round(missingrate,2))
+    nongap=[base for base in newseq.upper() if base not in gaps]
+    missingrate=sum(base in missing for base in nongap)/float(len(nongap))
+    print >>sys.stderr,ID+':'+str(round(missingrate,2)),
 print >>sys.stderr,''
 
 print >>sys.stderr,'excluded individuals:',excluded_ind
