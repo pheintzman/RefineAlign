@@ -46,5 +46,5 @@ RefineAlign first appears in Sharif et al. 2026, so for now please cite:
 
 The missingness filter script (fasta_nomissing_v2.py) is modified from the original by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) that is distributed under a GNU General Public License v3.0.
 In the original version, only Ns were recognised as missing data whereas the modification also recognises IUPAC ambiguity codes and asterisks as missing data.
-This version is also designed to be used on an alignment by recognising the gap character (-). Gaps are not considered in missingness calculations
-If sequences are of different lengths, then the script will exit with an error. This is in contrast to the original script, whereby sequences were silently truncated to the shortest. Applying the script to a multiple sequence alignment should not encounter this issue
+This version is also designed to be used on an alignment by recognising the gap character (-). Gaps are not considered in missingness calculations.
+If sequences are of different lengths, then the script will exit with an error. This is in contrast to the original script, whereby sequences were silently truncated to the shortest. Applying the script to a multiple sequence alignment should not encounter this issue.
