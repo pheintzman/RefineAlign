@@ -6,7 +6,7 @@ set -e
 #       RefineAlign         #
 #       P.D. Heintzman      #
 #       20261022            #
-#       version 3	        #
+#       version 2.3	        #
 #                           #
 #############################
 
