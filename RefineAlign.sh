@@ -6,7 +6,7 @@ set -e
 #       RefineAlign         #
 #       P.D. Heintzman      #
 #       20261022            #
-#       version 2.3	        #
+#       version 2.4         #
 #                           #
 #############################
 
@@ -35,6 +35,7 @@ REFERENCE_ID=$2
 	# Just the file name (without .fasta extension)
 MISSING_FILTER_PROPORTION=$3
 	# Just the file name (without .fasta extension)
+shift 3
 REMOVE_REFERENCE_GAPS=false
 	# Default: do not remove columns where the reference has gaps
 SUBSTRING_COLLAPSE=false
