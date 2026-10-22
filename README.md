@@ -18,7 +18,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 	chmod 755 ./python_R_scripts/*
 
 ## Before starting:
-- Dependencies: python, mafft, python3, and R (tested with R v4.4.2)
+- Dependencies: python, mafft, muscle, python3, and R (tested with R v4.4.2)
 - In the RefineAlign.sh script:
 	- Update the ml commands below for your system (works on Dardel 2026-10)
 	- Update the SCRIPT_DIRECTORY path to the location of /python_R_scripts
