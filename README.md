@@ -1,5 +1,5 @@
-# RefineAlign v2.2
-A shell script for generating  alignments of mitogenome sequences from a fasta file.
+# RefineAlign v3
+A shell script for generating an alignment of mitogenome sequences from a fasta file.
 
 RefineAlign:
 - Corrects reverse complement issues using mafft
@@ -20,17 +20,19 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 ## Before starting:
 - Dependencies: python, mafft, python3, and R (tested with R v4.4.2)
 - In the RefineAlign.sh script:
-	- Update the ml commands below for your system (works on Dardel 2026-08)
+	- Update the ml commands below for your system (works on Dardel 2026-10)
 	- Update the SCRIPT_DIRECTORY path to the location of /python_R_scripts
 
 ## Requires:
 - A fasta file of the sequences to be aligned (INPUT_FASTA)
 
 ## To run:
-	./RefineAlign.sh INPUT_FASTA REFERENCE_ID MISSING_FILTER_PROPORTION
+	./RefineAlign.sh INPUT_FASTA REFERENCE_ID MISSING_FILTER_PROPORTION [Two optional flags: --remove-reference-gaps --substringCollapse]
 	# INPUT_FASTA: File name including full path (with .fasta extension). Needs to include the REFERENCE_ID sequence
 	# REFERENCE_ID: Header name of the sequence in INPUT_FASTA for which the alignment coordinates are to be based on
 	# MISSING_FILTER_PROPORTION: A value between 0.0 (removes sequences with any missing data) and 1.0 (keeps sequences with all missing data). A value of 0.6 will retain sequences with <60% missing data (i.e. >40% completeness)
+	# --remove-reference-gaps: Remove all positions in the alignment where the REFERENCE_ID has a gap. This is useful for co-ordinate based analyses, but should not be applied if the alignment is to be used for phylogenetic or network analyses (only applied if flag is specified)
+	# --substringCollapse: Flag to collapse substrings. This means that if two sequences are identical but differ only by Ns or gaps then they are collapsed (only applied if flag is specified)
 
 ## Generates:
 - A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.missingfilter.refined.fasta)
@@ -41,8 +43,8 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 ## Citation:
 RefineAlign first appears in Sharif et al. 2026, so for now please cite:
 	
-	Sharif, B. et al. (2026) DNAharvester: A Nextflow Pipeline for Analysing Highly Degraded DNA from Ancient and Historical Specimens. biorXiv 2026.04.20.719564
-	https://doi.org/10.64898/2026.04.20.719564
+	Sharif, B. et al. (2026) DNAharvester: A Nextflow Pipeline for Analysing Highly Degraded DNA from Ancient and Historical Specimens. Bioinformatics btag782
+	https://doi.org/10.1093/bioinformatics/btag782
 
 The missingness filter script (fasta_nomissing_v2.py) is modified from the original by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) that is distributed under a GNU General Public License v3.0.
 In the original version, only Ns were recognised as missing data whereas the modification also recognises IUPAC ambiguity codes and asterisks as missing data.
