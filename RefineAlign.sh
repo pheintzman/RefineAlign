@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20260810            #
-#       version 2.2         #
+#       20261022            #
+#       version 3	        #
 #                           #
 #############################
 
@@ -35,6 +35,10 @@ REFERENCE_ID=$2
 	# Just the file name (without .fasta extension)
 MISSING_FILTER_PROPORTION=$3
 	# Just the file name (without .fasta extension)
+REMOVE_REFERENCE_GAPS=false
+	# Default: do not remove columns where the reference has gaps
+SUBSTRING_COLLAPSE=false
+	# Default: do not remove columns where the reference has gaps
 
 
 # Scripts and tools
@@ -44,6 +48,25 @@ SCRIPT_DIRECTORY=tools/RefineAlign/python_R_scripts
 
 # Generating an aligned reference panel of haplotypes from a FASTA file
 INPUT_FASTA=${INPUT_FASTA%.fasta}
+
+
+# Parse command-line options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --remove-reference-gaps)
+            REMOVE_REFERENCE_GAPS=true
+            shift
+            ;;
+        --substringCollapse)
+            SUBSTRING_COLLAPSE=true
+            shift
+            ;;
+        *)
+            echo "Error: Unknown option: $1" >&2
+            exit 1
+            ;;
+    esac
+done
 
 
 echo ">>> Running Reference panel generation..."
@@ -135,11 +158,15 @@ muscle \
 	# Add --remove-reference-gaps to enable this option
 module purge
 ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
+REMOVE_REFERENCE_GAPS_OPTION=()
+if [[ $REMOVE_REFERENCE_GAPS == true ]]; then
+    REMOVE_REFERENCE_GAPS_OPTION=(--remove-reference-gaps)
+fi
 python3 ${SCRIPT_DIRECTORY}/remove_all_gap_and_N_columns.py \
 	${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.refined.fasta \
 	${REFERENCE_ID} \
 	${INPUT_FASTA}.aln.curated.fasta \
-	--remove-reference-gaps
+    ${REMOVE_REFERENCE_GAPS_OPTION[@]}
 
 
 # Collapse identical sequences to haplotypes
@@ -147,9 +174,14 @@ python3 ${SCRIPT_DIRECTORY}/remove_all_gap_and_N_columns.py \
 	# differ only by Ns or gaps then they are collapsed (if flag is not specified then defaults to FALSE)
 module purge
 module load PDCOLD/24.11 R/4.4.2-cpeGNU-24.11
+SUBSTRING_COLLAPSE_OPTION=()
+if [[ $SUBSTRING_COLLAPSE == true ]]; then
+    SUBSTRING_COLLAPSE_OPTION=(--substringCollapse)
+fi
 ${SCRIPT_DIRECTORY}/collapse2Haplotypes.R \
 	${INPUT_FASTA}.aln.curated.fasta \
-	--substringCollapse
+    ${SUBSTRING_COLLAPSE_OPTION[@]}
+
 echo ">>>  Reference panel generation complete"
 
 
