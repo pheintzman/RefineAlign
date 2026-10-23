@@ -39,6 +39,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 - A final alignment of all sequences with superfluous gaps and N positions removed (INPUT_FASTA.aln.curated.fasta)
 - A collapsed alignment of haplotypes (INPUT_FASTA.aln.curated.haplotypes.fasta)
 - A sequence to haplotype lookup (INPUT_FASTA.aln.curated.haplotype_mapping.tsv)
+	- Columns 2 (original) and 5 (representative) can be used as a lookup
 	
 ## Citation:
 RefineAlign first appears in Sharif et al. 2026, so for now please cite:
