@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20261022            #
-#       version 2.4         #
+#       20261023            #
+#       version 2.5         #
 #                           #
 #############################
 
@@ -23,7 +23,7 @@ set -e
 	# A sequence to haplotype lookup TSV file (INPUT_FASTA.aln.curated.haplotype_mapping.tsv)
 
 # Before starting:
-	# Dependencies: python, mafft, python3, and R (tested with R v4.4.2)
+	# Dependencies: python, mafft, muscle, python3, and R (tested with R v4.4.2)
 	# Update the ml commands below for your system (works on Dardel 2026-08)
 	# Update the SCRIPT_DIRECTORY path to the locations of the python and R scripts
 	
