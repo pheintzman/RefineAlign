@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # collapse2Haplotypes (v3)
-# P.D. Heintzman (with assista nce from chatGPT)
+# P.D. Heintzman (with assistance from chatGPT)
 # 20261023
 
 # Collapses compatible haplotypes.
