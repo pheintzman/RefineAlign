@@ -1,4 +1,4 @@
-# RefineAlign v2.5
+# RefineAlign v2.6
 ### A shell script for generating an alignment of mitogenome sequences from a fasta file.
 
 RefineAlign:
