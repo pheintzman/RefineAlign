@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20261023            #
-#       version 2.5         #
+#       20261102            #
+#       version 2.6         #
 #                           #
 #############################
 
@@ -138,7 +138,8 @@ mafft \
 # Run a missingness filter to remove sequences with a maximum proportion of Ns given in $2
 # Script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
 module purge
-python ${SCRIPT_DIRECTORY}/fasta_nomissing_v2.py \
+ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
+python3 ${SCRIPT_DIRECTORY}/fasta_nomissing_v3.py \
 	--fastafile=${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta \
 	--maxmissing_ind=${MISSING_FILTER_PROPORTION} \
 	> ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta
