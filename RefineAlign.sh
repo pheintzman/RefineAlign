@@ -5,8 +5,8 @@ set -e
 #                           #
 #       RefineAlign         #
 #       P.D. Heintzman      #
-#       20261102            #
-#       version 2.6         #
+#       20261104            #
+#       version 3.0         #
 #                           #
 #############################
 
@@ -17,14 +17,14 @@ set -e
 	# The REFERENCE_ID fasta needs to be in INPUT_FASTA with a header name identical to the REFERENCE_ID file name
 
 # Generates:
-	# A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.missingfilter.refined.fasta)
+	# A final alignment of all sequences (INPUT_FASTA.aln.coordinates_fixed.aln.problematic_regions_removed.missingfilter.refined.fasta)
 	# A final alignment of all sequences with superfluous gaps and N positions removed (INPUT_FASTA.aln.curated.fasta)
 	# A collapsed alignment of haplotypes (INPUT_FASTA.aln.curated.haplotypes.fasta)
 	# A sequence to haplotype lookup TSV file (INPUT_FASTA.aln.curated.haplotype_mapping.tsv)
 
 # Before starting:
-	# Dependencies: python, mafft, muscle, python3, and R (tested with R v4.4.2)
-	# Update the ml commands below for your system (works on Dardel 2026-08)
+	# Dependencies: mafft, muscle, python3, and R (tested with R v4.4.2)
+	# Update the ml commands below for your system (works on Dardel 2026-11)
 	# Update the SCRIPT_DIRECTORY path to the locations of the python and R scripts
 	
 
@@ -35,7 +35,10 @@ REFERENCE_ID=$2
 	# Just the file name (without .fasta extension)
 MISSING_FILTER_PROPORTION=$3
 	# Just the file name (without .fasta extension)
-shift 3
+PROBLEMATIC_REGIONS=$4
+	# If none, use: no_problematic_regions
+	# If there are, use coordinate ranges in quotes, e.g. "16100-16300" or "16100-16300,16500-16750"
+shift 4
 REMOVE_REFERENCE_GAPS=false
 	# Default: do not remove columns where the reference has gaps
 SUBSTRING_COLLAPSE=false
@@ -135,14 +138,24 @@ mafft \
 	> ${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta
 
 
+# Hard masks bases in PROBLEMATIC_REGIONS of all sequences except REFERENCE_ID
+# Useful for removal of VNTR regions, the control region, or other regions susceptible to misalignments
+module purge
+ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
+python3 ${SCRIPT_DIRECTORY}/remove_problematic_regions.py \
+	${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta \
+	${REFERENCE_ID} \
+	--problematic_regions ${PROBLEMATIC_REGIONS}
+
+
 # Run a missingness filter to remove sequences with a maximum proportion of Ns given in $2
 # Script by Pontus Skoglund (https://github.com/pontussk/fasta_nomissing.py) distributed under a GNU General Public License v3.0
 module purge
 ml bioinfo-tools biopython/1.68-py3 PDCOLD/23.12 ete/3.1.3-cpeGNU-23.12
 python3 ${SCRIPT_DIRECTORY}/fasta_nomissing_v3.py \
-	--fastafile=${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta \
+	--fastafile=${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.fasta \
 	--maxmissing_ind=${MISSING_FILTER_PROPORTION} \
-	> ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta
+	> ${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.missingfilter.fasta
 
 
 # Refine the final alignment with muscle
@@ -150,8 +163,8 @@ module purge
 ml bioinfo-tools muscle/3.8.1551
 muscle \
 	-refine \
-	-in ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta \
-	-out ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.refined.fasta
+	-in ${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.missingfilter.fasta \
+	-out ${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.missingfilter.refined.fasta
 
 
 # Remove positions from the alignment that only consist of gaps and Ns
@@ -165,7 +178,7 @@ if [[ $REMOVE_REFERENCE_GAPS == true ]]; then
     REMOVE_REFERENCE_GAPS_OPTION=(--remove-reference-gaps)
 fi
 python3 ${SCRIPT_DIRECTORY}/remove_all_gap_and_N_columns.py \
-	${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.refined.fasta \
+	${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.missingfilter.refined.fasta \
 	${REFERENCE_ID} \
 	${INPUT_FASTA}.aln.curated.fasta \
     ${REMOVE_REFERENCE_GAPS_OPTION[@]}
@@ -193,4 +206,5 @@ rm ${INPUT_FASTA}.aln.start_rotated*.fasta
 rm ${INPUT_FASTA}.aln.end_rotated*.fasta
 rm ${INPUT_FASTA}.aln.coordinates_fixed.fasta
 rm ${INPUT_FASTA}.aln.coordinates_fixed.aln.fasta
-rm ${INPUT_FASTA}.aln.coordinates_fixed.aln.missingfilter.fasta
+rm ${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.fasta
+rm ${INPUT_FASTA}.aln.coordinates_fixed.aln.problematic_regions_removed.missingfilter.fasta
