@@ -32,7 +32,7 @@ Made for use on the Swedish NAISS Dardel cluster but easily modifiable for other
 	# INPUT_FASTA: File name including full path (with .fasta extension). Needs to include the REFERENCE_ID sequence
 	# REFERENCE_ID: Header name of the sequence in INPUT_FASTA for which the alignment coordinates are to be based on
 	# MISSING_FILTER_PROPORTION: A value between 0.0 (removes sequences with any missing data) and 1.0 (keeps sequences with all missing data). A value of 0.6 will retain sequences with <60% missing data (i.e. >40% completeness)
-	# PROBLEMATIC_REGIONS: REFERENCE_ID coordinates of regions to be hard masked in all sequences except the REFERENCE_ID. If there are none, use If none, give as no_problematic_regions. If there are, use coordinate ranges in quotes, e.g. "16100-16300" or "16100-16300,16500-16750"
+	# PROBLEMATIC_REGIONS: REFERENCE_ID coordinates of regions to be hard masked in all sequences except the REFERENCE_ID. If there are none, give as no_problematic_regions. If there are, use coordinate ranges in quotes, e.g. "16100-16300" or "16100-16300,16500-16750"
 	# --remove-reference-gaps: Remove all positions in the alignment where the REFERENCE_ID has a gap. This is useful for co-ordinate based analyses, but should not be applied if the alignment is to be used for phylogenetic or network analyses (only applied if flag is specified)
 	# --substringCollapse: Flag to collapse substrings. This means that if two sequences are identical but differ only by Ns or gaps then they are collapsed (only applied if flag is specified)
 
