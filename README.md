@@ -4,7 +4,7 @@
 RefineAlign:
 - Corrects reverse complement issues using mafft
 - Ensures that all sequences are on the same alignment coordinates
-- Optionally hard masks problematic regions of the mitogenome (VNTR, control region, etc)
+- Can hard mask problematic regions of the mitogenome (VNTR, control region, etc)
 - Provides a missingness filter to remove sequences with Ns above a set proportion
 - Refines the mafft alignment using muscle
 - Removes superfluous gaps and N positions
